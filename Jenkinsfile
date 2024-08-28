@@ -1,6 +1,6 @@
 pipeline {
   agent any
- 
+
   tools {
   maven 'Maven3'
   }
@@ -9,18 +9,18 @@ pipeline {
       steps {
       sh 'mvn clean install -f MyWebApp/pom.xml'
       }
-      stage ('Code Quality scan')  {
-       withSonarQubeEnv('SonarQube') {
-        sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
+	stage ('Code Quality scan')  {
+      withSonarQubeEnv('SonarQube') {
+      sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
         }
-   }
+      }
    
-     stage("Quality Gate") {
+    stage("Quality Gate") {
         timeout(time: 1, unit: 'HOURS') {
             waitForQualityGate abortPipeline: true
         }
-   }       
-  }
+      }       
+    }
    stage ('JaCoCo') {
       steps {
       jacoco()
@@ -65,6 +65,6 @@ pipeline {
         echo "deployed to QA Env successfully"
         slackSend(channel:'#devops-prj', message: "Job is successful, here is the info - Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
       }
-    }  
+    }
   }
 }
