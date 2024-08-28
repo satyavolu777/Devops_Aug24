@@ -1,25 +1,12 @@
-pipeline {
-  agent any
-
-  tools {
-  maven 'Maven3'
-  }
-  stages {
-    stage ('Build') {
-      steps {
-      sh 'mvn clean install -f MyWebApp/pom.xml'
-      }
-	stage ('Code Quality scan')  {
-      withSonarQubeEnv('SonarQube') {
       sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
         }
       }
-   
+
     stage("Quality Gate") {
         timeout(time: 1, unit: 'HOURS') {
             waitForQualityGate abortPipeline: true
         }
-      }       
+      }
     }
    stage ('JaCoCo') {
       steps {
@@ -67,4 +54,4 @@ pipeline {
       }
     }
   }
-}
+
