@@ -9,8 +9,7 @@ pipeline {
       steps{
       sh 'mvn clean install -f MyWebApp/pom.xml'
      
-    }
-	sh 'echo Code Quality Scan'{
+      sh 'echo Code Quality Scan'{
                  sh 'withSonarQubeEnv('SonarQube')' {
                  sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
               }    
@@ -23,9 +22,10 @@ pipeline {
               sh'if (qg.status != 'OK')' {
                   sh 'error "Pipeline aborted due to quality gate failure: ${qg.status}"'
               }
+            }
           }
         }
-      }  
+       }  
    stage ('JaCoCo') {
       steps {
       jacoco()
