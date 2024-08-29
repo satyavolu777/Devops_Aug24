@@ -13,7 +13,7 @@ pipeline {
   }
     stage('Code Quality scan') {
                  withSonarQubeEnv('SonarQube') {
-                 sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar'
+                 sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
               }    
           }
       }
