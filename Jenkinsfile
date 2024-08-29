@@ -8,13 +8,13 @@ pipeline {
     stage ('Build') {
       steps {
       sh 'mvn clean install -f MyWebApp/pom.xml'
-      Code Quality scan{
+      sh 'echo Code Quality scan'{
       withSonarQubeEnv('SonarQube') {
       sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
        }
      }
    
-     Quality Gate{
+     sh 'echo Quality Gate'{
         timeout(time: 1, unit: 'HOURS') {
             waitForQualityGate abortPipeline: true
        }
