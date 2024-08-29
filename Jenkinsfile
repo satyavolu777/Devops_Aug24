@@ -9,7 +9,7 @@ pipeline {
       steps {
       sh 'mvn clean install -f MyWebApp/pom.xml'
       sh 'echo Code Quality scan'{
-      withSonarQubeEnv('SonarQube') {
+      sh 'withSonarQubeEnv('SonarQube') {
       sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
        }
      }
