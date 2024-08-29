@@ -8,10 +8,9 @@ pipeline {
     stage ('Build') {
       steps {
       sh 'mvn clean install -f MyWebApp/pom.xml'
-      }
-       sh 'echo Code Quality scan'  {
-       withSonarQubeEnv('SonarQube') {
-        sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
+      sh 'echo Code Quality scan'  {
+      withSonarQubeEnv('SonarQube') {
+      sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
        }
      }
    
@@ -20,6 +19,7 @@ pipeline {
             waitForQualityGate abortPipeline: true
        }
      }
+     }	
     }	
    stage ('JaCoCo') {
       steps {
