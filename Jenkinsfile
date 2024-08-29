@@ -6,9 +6,9 @@ pipeline {
   }
   stages {
     stage ('Build') {
-      steps {
+      
       sh 'mvn clean install -f MyWebApp/pom.xml'
-      }
+     
     }
 	stage("Code Quality Scan") {
                  withSonarQubeEnv('SonarQube') {
