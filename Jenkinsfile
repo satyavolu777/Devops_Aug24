@@ -6,24 +6,25 @@ pipeline {
   }
   stages {
     stage ('Build') {
-      
+      steps{
       sh 'mvn clean install -f MyWebApp/pom.xml'
      
     }
-	stage("Code Quality Scan") {
-                 withSonarQubeEnv('SonarQube') {
+	sh 'echo Code Quality Scan'{
+                 sh 'withSonarQubeEnv('SonarQube')' {
                  sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
               }    
           
       }
       
-      stage("Quality Gate"){
-          timeout(time: 1, unit: 'HOURS') {
-              def qg = waitForQualityGate()
-              if (qg.status != 'OK') {
-                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+      sh 'echo Quality Gate'{
+          sh 'timeout(time: 1, unit: 'HOURS')' {
+              sh 'def qg = waitForQualityGate()'
+              sh'if (qg.status != 'OK')' {
+                  sh 'error "Pipeline aborted due to quality gate failure: ${qg.status}"'
               }
           }
+        }
       }  
    stage ('JaCoCo') {
       steps {
