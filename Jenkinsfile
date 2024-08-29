@@ -1,11 +1,13 @@
-      sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
-        }
-      }
+pipeline {
+  agent any
 
-    stage("Quality Gate") {
-        timeout(time: 1, unit: 'HOURS') {
-            waitForQualityGate abortPipeline: true
-        }
+  tools {
+  maven 'Maven3'
+  }
+  stages {
+    stage ('Build') {
+      steps {
+      sh 'mvn clean install -f MyWebApp/pom.xml'
       }
     }
    stage ('JaCoCo') {
@@ -53,5 +55,4 @@
         slackSend(channel:'#devops-prj', message: "Job is successful, here is the info - Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
       }
     }
-  }
-
+ }
