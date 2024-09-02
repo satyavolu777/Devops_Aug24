@@ -1,6 +1,13 @@
-node {
+pipeline {
+  agent any
+ 
+  tools {
+ 
+
+ 
 
     def mvnHome = tool 'Maven3'
+    }        
      stage ('Build')  {
         sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml clean install"
    }
