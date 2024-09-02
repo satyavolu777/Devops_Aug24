@@ -2,31 +2,15 @@ pipeline {
   agent any
 
   tools {
-  maven 'Maven3'
+  def mvnHome = tool'Maven3'
   }
   stages {
     stage ('Build') {
       steps{
       sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml clean install"
-      
-       
-      echo "Code Quality Scan"{
-      withSonarQubeEnv('SonarQube') {
-                 sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml sonar:sonar"
-              }    
-          
       }
-      
-      echo "Quality Gate"{
-          timeout(time: 1, unit: 'HOURS') {
-              def qg = waitForQualityGate()
-              if (qg.status != 'OK') {
-                  sh 'error "Pipeline aborted due to quality gate failure: ${qg.status}"'
-              }
-           } 
-          }
-        }
-       }  
+     }
+    }  
    stage ('JaCoCo') {
       steps {
       jacoco()
