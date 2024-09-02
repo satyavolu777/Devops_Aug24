@@ -7,7 +7,7 @@ pipeline {
   stages {
     stage ('Build') {
       steps{
-      sh 'mvn clean install -f MyWebApp/pom.xml'
+      sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml clean install"
      
       sh 'echo Code Quality Scan'{
                  sh 'withSonarQubeEnv('SonarQube')' {
@@ -34,7 +34,7 @@ pipeline {
     stage ('DEV Deploy') {
       steps {
       echo "deploying to DEV Env "
-      deploy adapters: [tomcat9(credentialsId: '136cdd6f-db57-4497-a037-73f7e0a23959', path: '', url: 'http://ec2-13-201-192-227.ap-south-1.compute.amazonaws.com:8080')], contextPath: null, war: '**/*.war'
+      deploy adapters: [tomcat9(credentialsId: '136cdd6f-db57-4497-a037-73f7e0a23959', path: '', url: 'http://ec2-65-2-135-127.ap-south-1.compute.amazonaws.com:8080')], contextPath: null, war: '**/*.war'
       }
     }
     stage ('Slack Notification') {
@@ -54,7 +54,7 @@ pipeline {
      stage ('QA Deploy') {
       steps {
         echo "deploying to QA Env "
-        deploy adapters: [tomcat9(credentialsId: '136cdd6f-db57-4497-a037-73f7e0a23959', path: '', url: 'http://ec2-13-201-192-227.ap-south-1.compute.amazonaws.com:8080')], contextPath: null, war: '**/*.war'
+        deploy adapters: [tomcat9(credentialsId: '136cdd6f-db57-4497-a037-73f7e0a23959', path: '', url: 'http://ec2-65-2-135-127.ap-south-1.compute.amazonaws.com:8080')], contextPath: null, war: '**/*.war'
         }
     }
     stage ('QA Approve') {
