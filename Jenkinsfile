@@ -1,16 +1,15 @@
 pipeline {
   agent any
-
+ 
   tools {
-  def mvnHome = tool'Maven3'
+  maven 'Maven3'
   }
   stages {
     stage ('Build') {
-      steps{
-      sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml clean install"
+      steps {
+      sh 'mvn clean install -f MyWebApp/pom.xml'
       }
-     }
-    }  
+    }
    stage ('JaCoCo') {
       steps {
       jacoco()
@@ -55,7 +54,7 @@ pipeline {
         echo "deployed to QA Env successfully"
         slackSend(channel:'#devops-prj', message: "Job is successful, here is the info - Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
       }
-    }
- }
-
+    }  
+  }
+}
 
