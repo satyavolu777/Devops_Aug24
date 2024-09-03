@@ -1,12 +1,9 @@
 node {
 
     def mvnHome = tool 'Maven3'
-    stage ("checkout")  {
-     //enter your repo info
-    }
-
+    
      stage ('Build')  {
-        sh "${mvnHome}/bin/mvn -f MyWebApp/pom.xml clean install"
+        sh "${mvnHome}/bin/mvn clean install"
    }
      stage ('Code Quality scan')  {
        withSonarQubeEnv('SonarQube') {
